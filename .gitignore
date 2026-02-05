@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Maven / Gradle
+target/
+build/
+
+# Selenium / Reports
+logs/
+reports/
+allure-results/
+allure-report/
+
+# OS
+.DS_Store
