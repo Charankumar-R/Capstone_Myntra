@@ -21,8 +21,8 @@ import java.util.Properties;
 
 public class Hooks {
 
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected static WebDriver driver;
+    protected static WebDriverWait wait;
     protected ExtentSparkReporter extSparkReporter = new ExtentSparkReporter("reports/ExtentReport.html");
     protected ExtentReports extReports = new ExtentReports();
     protected ExtentTest extTest;
