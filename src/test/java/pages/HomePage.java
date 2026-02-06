@@ -10,8 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+    protected final WebDriver driver;
+    protected final WebDriverWait wait;
 
     @FindBy(xpath = "//span[normalize-space()='Profile']")
     private WebElement profile;
@@ -28,7 +28,7 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    private boolean validateLogin() {
+    public boolean validateLogin() {
         Actions actions = new Actions(driver);
         try {
             actions.moveToElement(profile).perform();

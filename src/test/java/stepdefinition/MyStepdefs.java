@@ -5,18 +5,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pages.HomePage;
 
 public class MyStepdefs {
+    HomePage homePage;
+
     @Given("user is on the home page of Myntra")
     public void userIsOnTheHomePageOfMyntra() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        homePage = new HomePage(Hooks.driver, Hooks.wait);
     }
 
     @When("user hovers to profile and clicks on login")
     public void userHoversToProfileAndClicksOnLogin() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        boolean flag = homePage.validateLogin();
     }
 
     @And("user enters mobile number and clicks continue")
