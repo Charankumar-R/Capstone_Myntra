@@ -1,38 +1,38 @@
-package utils;
+package stepdefinition;
 
 import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.PropertyReader;
 
-import java.io.File;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class Base {
+public class Hooks {
 
-    protected static WebDriver driver;
-    protected static WebDriverWait wait;
-    protected static ExtentReports extentReports;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
+    protected ExtentSparkReporter extSparkReporter = new ExtentSparkReporter("reports/ExtentReport.html");
+    protected ExtentReports extReports = new ExtentReports();
+    protected ExtentTest extTest;
     protected Properties prop;
 
-    public void launchBrowser() {
 
-        // ✅ Ensure reports folder exists
-        new File("reports").mkdirs();
+    @Before
+    public void beforeScenario(Scenario scenario) {
 
-        // ✅ Attach reporter
-        ExtentSparkReporter spark =
-                new ExtentSparkReporter("reports/ExtentReport.html");
-
-        extentReports = new ExtentReports();
-        extentReports.attachReporter(spark);
+        extReports.attachReporter(extSparkReporter);
 
         prop = PropertyReader.readProperty();
         String browser = prop.getProperty("Browser");
@@ -43,8 +43,10 @@ public class Base {
         prefs.put("profile.password_manager_leak_detection", false);
 
         if (browser.equalsIgnoreCase("chrome")) {
+//            Using Chrome Browser
             ChromeOptions options = new ChromeOptions();
             options.setExperimentalOption("prefs", prefs);
+            options.addArguments("--headless=new");
             driver = new ChromeDriver(options);
             wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
@@ -57,20 +59,13 @@ public class Base {
         } else {
             throw new RuntimeException("Invalid browser name: " + browser);
         }
-
-        driver.manage().window().maximize();
         driver.get(url);
     }
 
-    // ✅ MUST be called once after all tests
-    public void tearDown() {
-        if (extentReports != null) {
-            extentReports.flush();
-        }
-        if (driver != null) {
-            driver.quit();
-        }
-
-
+    @After
+    public void afterScenario(Scenario scenario) {
+        driver.quit();
+        extReports.flush();
+//	    SimpleEmailSender.sendReport(); // email
     }
 }
